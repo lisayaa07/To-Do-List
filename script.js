@@ -216,12 +216,45 @@ if (document.getElementById('diaryDate')) {
     diaryText.value = '';
   }
 
-  // 📖 Show diary popup
+  // Show diary popup
   function showPopup(entry) {
-    popupDate.textContent = `Date: ${entry.date}`;
-    popupText.textContent = entry.text;
-    popupOverlay.style.display = 'flex';
+  popupDate.textContent = `📅 Date: ${entry.date}`;
+  popupText.innerHTML = ""; // เคลียร์ข้อความเก่า
+
+  // 📝 แสดงข้อความของไดอารี่
+  const diaryPara = document.createElement("p");
+  diaryPara.textContent = entry.text;
+  popupText.appendChild(diaryPara);
+
+  // ✅ ดึง tasks ที่เสร็จแล้วและตรงวันที่
+  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  const doneTasks = tasks.filter(
+    t => t.completed && t.date === entry.date
+  );
+
+  if (doneTasks.length > 0) {
+    const taskTitle = document.createElement("h4");
+    taskTitle.textContent = "To-Do-List Completed :";
+    taskTitle.style.marginTop = "15px";
+    popupText.appendChild(taskTitle);
+
+    const taskList = document.createElement("ul");
+    doneTasks.forEach(task => {
+      const li = document.createElement("li");
+      li.textContent = `- ${task.text}`;
+      taskList.appendChild(li);
+    });
+    popupText.appendChild(taskList);
+  } else {
+    const noTask = document.createElement("p");
+    noTask.textContent = "No Have To-Do-List Completed ";
+    noTask.style.fontStyle = "italic";
+    noTask.style.color = "#7a6b5a";
+    popupText.appendChild(noTask);
   }
+
+  popupOverlay.style.display = "flex";
+}
 
   // 📅 Render diary list (newest → oldest)
   function renderDiaryList() {
