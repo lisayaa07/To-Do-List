@@ -379,3 +379,20 @@ footer {
 }
 
 
+.image-upload {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.image-upload input[type="file"] {
+  background-color: #fffaf0;
+  border: 1px solid #b6a382;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+}
+
+.image-upload input[type="file"]:hover {
+  background-color: #f5e9d2;
+}

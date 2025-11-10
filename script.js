@@ -179,10 +179,12 @@ if (document.getElementById('editTaskInput')) {
   });
 }
 
-/* ========= หน้า diary.html ========= */
+/* ========= Diary Page ========= */
 if (document.getElementById('diaryDate')) {
   const diaryDate = document.getElementById('diaryDate');
   const diaryText = document.getElementById('diaryText');
+  const diaryImage = document.getElementById('diaryImage');
+  const previewImage = document.getElementById('previewImage');
   const saveBtn = document.getElementById('saveDiary');
   const diaryList = document.getElementById('diaryList');
   const popupOverlay = document.getElementById('popupOverlay');
@@ -192,74 +194,97 @@ if (document.getElementById('diaryDate')) {
 
   let diaries = JSON.parse(localStorage.getItem('diaries')) || [];
 
-  // 💾 Save diary
+  // แสดงรูป preview ทันทีที่เลือก
+  diaryImage.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        previewImage.src = event.target.result;
+        previewImage.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      previewImage.style.display = 'none';
+    }
+  });
+
+  // 💾 บันทึก diary
   function saveDiary() {
     const date = diaryDate.value;
     const text = diaryText.value.trim();
-    if (!date || !text) {
-      alert('Please select a date and write something.');
+    const image = previewImage.src || null;
+
+    if (!date || (!text && !image)) {
+      alert('Please select a date and write something or add an image.');
       return;
     }
 
-    const now = Date.now();
     const existing = diaries.find(d => d.date === date);
-
     if (existing) {
       existing.text = text;
-      existing.timestamp = now; // update timestamp when edited
+      existing.image = image;
     } else {
-      diaries.push({ date, text, timestamp: now });
+      diaries.push({ date, text, image });
     }
 
     localStorage.setItem('diaries', JSON.stringify(diaries));
-    renderDiaryList();
+
+    // reset ฟอร์ม
     diaryText.value = '';
+    diaryImage.value = '';
+    previewImage.style.display = 'none';
+
+    renderDiaryList();
   }
 
-  // Show diary popup
+  // 📖 แสดง popup ของแต่ละวัน
   function showPopup(entry) {
-  popupDate.textContent = `📅 Date: ${entry.date}`;
-  popupText.innerHTML = ""; // เคลียร์ข้อความเก่า
+    popupDate.textContent = `📅 Date: ${entry.date}`;
+    popupText.innerHTML = ''; // เคลียร์เนื้อหาเก่า
 
-  // 📝 แสดงข้อความของไดอารี่
-  const diaryPara = document.createElement("p");
-  diaryPara.textContent = entry.text;
-  popupText.appendChild(diaryPara);
+    // 📝 ข้อความในไดอารี่
+    if (entry.text) {
+      const diaryPara = document.createElement('p');
+      diaryPara.textContent = entry.text;
+      popupText.appendChild(diaryPara);
+    }
 
-  // ✅ ดึง tasks ที่เสร็จแล้วและตรงวันที่
-  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-  const doneTasks = tasks.filter(
-    t => t.completed && t.date === entry.date
-  );
+    // 🖼️ แสดงรูปถ้ามี
+    if (entry.image) {
+      const img = document.createElement('img');
+      img.src = entry.image;
+      img.alt = 'Diary Image';
+      img.style.maxWidth = '100%';
+      img.style.borderRadius = '10px';
+      img.style.marginTop = '10px';
+      popupText.appendChild(img);
+    }
 
-  if (doneTasks.length > 0) {
-    const taskTitle = document.createElement("h4");
-    taskTitle.textContent = "To-Do-List Completed :";
-    taskTitle.style.marginTop = "15px";
-    popupText.appendChild(taskTitle);
+    // ✅ To-Do ที่เสร็จแล้วของวันเดียวกัน
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const doneTasks = tasks.filter(t => t.completed && t.date === entry.date);
 
-    const taskList = document.createElement("ul");
-    doneTasks.forEach(task => {
-      const li = document.createElement("li");
-      li.textContent = `- ${task.text}`;
-      taskList.appendChild(li);
-    });
-    popupText.appendChild(taskList);
-  } else {
-    const noTask = document.createElement("p");
-    noTask.textContent = "No Have To-Do-List Completed ";
-    noTask.style.fontStyle = "italic";
-    noTask.style.color = "#7a6b5a";
-    popupText.appendChild(noTask);
+    if (doneTasks.length > 0) {
+      const taskTitle = document.createElement('h4');
+      taskTitle.textContent = 'To Do List Completed :';
+      popupText.appendChild(taskTitle);
+
+      const taskList = document.createElement('ul');
+      doneTasks.forEach(task => {
+        const li = document.createElement('li');
+        li.textContent = `- ${task.text}`;
+        taskList.appendChild(li);
+      });
+      popupText.appendChild(taskList);
+    }
+
+    popupOverlay.style.display = 'flex';
   }
 
-  popupOverlay.style.display = "flex";
-}
-
-  // 📅 Render diary list (newest → oldest)
+  // 📅 แสดงรายการ diary ทั้งหมด
   function renderDiaryList() {
     diaryList.innerHTML = '';
-
     if (diaries.length === 0) {
       const msg = document.createElement('p');
       msg.textContent = 'ยังไม่มี Diary ในรายการ เริ่มเขียนได้เลย!';
@@ -268,10 +293,8 @@ if (document.getElementById('diaryDate')) {
       return;
     }
 
-    // ✅ Sort newest → oldest (by timestamp)
-   // 🔹 เรียงตามวันที่ (ใหม่ → เก่า)
-     diaries.sort((a, b) => new Date(b.date) - new Date(a.date));
-
+    // เรียงตามวันที่ใหม่ → เก่า
+    diaries.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     diaries.forEach(entry => {
       const li = document.createElement('li');
@@ -284,18 +307,24 @@ if (document.getElementById('diaryDate')) {
       const btnGroup = document.createElement('div');
       btnGroup.className = 'btn-group';
 
-      // ✏️ Edit button
+      // ✏️ แก้ไข
       const editBtn = document.createElement('button');
       editBtn.textContent = 'แก้ไข';
       editBtn.className = 'edit-btn';
       editBtn.onclick = (e) => {
         e.stopPropagation();
         diaryDate.value = entry.date;
-        diaryText.value = entry.text;
+        diaryText.value = entry.text || '';
+        if (entry.image) {
+          previewImage.src = entry.image;
+          previewImage.style.display = 'block';
+        } else {
+          previewImage.style.display = 'none';
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
       };
 
-      // 🗑️ Delete button
+      // 🗑️ ลบ
       const deleteBtn = document.createElement('button');
       deleteBtn.textContent = 'ลบ';
       deleteBtn.className = 'delete-btn';
@@ -317,9 +346,6 @@ if (document.getElementById('diaryDate')) {
   }
 
   saveBtn.addEventListener('click', saveDiary);
-  closePopup.addEventListener('click', () => {
-    popupOverlay.style.display = 'none';
-  });
-
+  closePopup.addEventListener('click', () => (popupOverlay.style.display = 'none'));
   renderDiaryList();
 }
