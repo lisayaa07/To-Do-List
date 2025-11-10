@@ -255,9 +255,8 @@ if (document.getElementById('diaryDate')) {
       const img = document.createElement('img');
       img.src = entry.image;
       img.alt = 'Diary Image';
-      img.style.maxWidth = '100%';
-      img.style.borderRadius = '10px';
-      img.style.marginTop = '10px';
+      img.classList.add('popup-img');
+
       popupText.appendChild(img);
     }
 

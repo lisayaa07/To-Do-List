@@ -404,6 +404,28 @@ footer {
   background-color: #f5e9d2;
 }
 
+.popup-img {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin: 10px auto 0;
+  display: block;
+}
+
+.popup-box img {
+  width: 250px;          /* ✅ กำหนดความกว้างคงที่ */
+  height: 250px;         /* ✅ กำหนดความสูงคงที่ */
+  object-fit: cover;     /* ✅ ครอบรูปให้พอดีกรอบ โดยไม่บิดเบี้ยว */
+  border-radius: 10px;
+  margin-top: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;    /* ✅ จัดให้อยู่ตรงกลาง */
+}
+
+
+
 /* 🎨 ปรับสไตล์ input type="date" ให้เข้ากับธีม Retro */
 input[type="date"] {
   appearance: none;              /* ซ่อนสไตล์เดิมของเบราว์เซอร์ */
