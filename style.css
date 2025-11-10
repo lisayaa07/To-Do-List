@@ -1,14 +1,17 @@
-body {
-  font-family: 'Courier New', monospace;
+@import url('https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&display=swap');
+
+html, body {
+  font-family: 'Mitr', 'Courier New', sans-serif;
   background-color: #f5e9d2;
   color: #4b3f33;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   min-height: 100vh;
+  margin: 0;
   padding: 30px;
 }
 
+/* ✅ ลบ display:flex ออกจาก body เพื่อให้ขนาด container กลับมาเท่าเดิม */
+
+/* ส่วนหัวของแต่ละหน้า */
 h1 {
   background: #d7bfa5;
   color: #3c2e25;
@@ -16,7 +19,10 @@ h1 {
   border-radius: 10px;
   box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
   letter-spacing: 2px;
+  text-align: center;
+  
 }
+
 
 /* ===== Dashboard ===== */
 .dashboard-grid {
@@ -93,10 +99,11 @@ h1 {
   border-radius: 15px;
   padding: 20px;
   width: 90%;
-  max-width: 600px;
+  max-width: 700px;  /* ✅ ปรับให้เท่ากับหน้าไดอารี่ */
   box-shadow: 5px 5px 0px #c2a87c;
-  margin-top: 25px;
+  margin: 30px auto; /* ✅ ให้อยู่ตรงกลางแนวนอน และเพิ่มระยะด้านบน */
 }
+
 
 .input-group {
   display: flex;
@@ -105,7 +112,7 @@ h1 {
   flex-wrap: wrap;
 }
 
-input[type="text"], input[type="date"] {
+input[type="text"] {
   flex: 1;
   padding: 10px;
   border: 1px solid #b6a382;
@@ -219,7 +226,7 @@ footer {
   width: 90%;
   max-width: 700px;
   box-shadow: 5px 5px 0px #c2a87c;
-  margin-top: 20px;
+  margin: 30px auto; /* ✅ ทำให้กล่องอยู่ตรงกลางแนวนอน */
 }
 
 .diary-input input[type="date"] {
@@ -278,7 +285,7 @@ footer {
   width: 90%;
   max-width: 700px;
   box-shadow: 5px 5px 0px #c2a87c;
-  margin-top: 25px;
+  margin: 30px auto; /* ✅ ให้อยู่ตรงกลางเช่นกัน */
 }
 
 .diary-list ul {
@@ -395,4 +402,130 @@ footer {
 
 .image-upload input[type="file"]:hover {
   background-color: #f5e9d2;
+}
+
+/* 🎨 ปรับสไตล์ input type="date" ให้เข้ากับธีม Retro */
+input[type="date"] {
+  appearance: none;              /* ซ่อนสไตล์เดิมของเบราว์เซอร์ */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #fffaf0;
+  border: 2px solid #bca88e;
+  border-radius: 10px;
+  color: #4b3f33;
+  padding: 10px 15px;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  box-shadow: 3px 3px 0px #c2a87c;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+input[type="date"]:hover {
+  background-color: #f5e9d2;
+  transform: scale(1.03);
+}
+
+input[type="date"]:focus {
+  outline: none;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* 🔽 ไอคอนลูกศร dropdown (สำหรับ Chrome / Edge / Safari) */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%234b3f33" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right;
+  padding-right: 10px;
+  filter: sepia(40%);
+}
+
+/* ==== ปรับสไตล์ Flatpickr ให้เข้ากับธีม Retro ==== */
+.flatpickr-calendar {
+  background: #fff7e0;
+  border: 2px solid #bca88e;
+  box-shadow: 5px 5px 0px #c2a87c;
+  border-radius: 12px;
+  font-family: 'Courier New', monospace;
+  color: #4b3f33;
+}
+
+.flatpickr-months {
+  background-color: #d7bfa5;
+  color: #3c2e25;
+  border-bottom: 2px solid #bca88e;
+}
+
+.flatpickr-monthDropdown-months,
+.flatpickr-current-month span.cur-month,
+.flatpickr-current-month input.cur-year {
+  color: #3c2e25 !important;
+  font-weight: bold;
+}
+
+.flatpickr-weekdays {
+  background-color: #f5e9d2;
+}
+
+.flatpickr-weekday {
+  color: #3c2e25;
+  font-weight: bold;
+}
+
+.flatpickr-day {
+  border-radius: 6px;
+  color: #4b3f33;
+  transition: 0.2s;
+}
+
+.flatpickr-day:hover {
+  background-color: #e9d1a8;
+}
+
+.flatpickr-day.today {
+  background-color: #d7bfa5;
+  color: #fff;
+  border: none;
+}
+
+.flatpickr-day.selected {
+  background-color: #c3a784 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.flatpickr-day.inRange,
+.flatpickr-day.nextMonthDay {
+  color: #9a8d7a;
+}
+/* สไตล์ช่องเลือกวันที่ (Flatpickr altInput) ให้ดูโค้งมนและเข้าธีม Retro */
+input.flatpickr-input[readonly],
+.flatpickr-input[placeholder],
+input.flatpickr-input {
+  background-color: #fffaf0 !important;
+  border: 2px solid #bca88e !important;
+  border-radius: 12px !important;
+  color: #4b3f33 !important;
+  font-family: 'Courier New', monospace !important;
+  font-size: 1rem !important;
+  padding: 10px 15px !important;
+  box-shadow: 3px 3px 0px #c2a87c !important;
+  transition: 0.2s;
+  width: 100%;
+}
+
+input.flatpickr-input::placeholder {
+  color: #8b7a66;
+  opacity: 0.8;
+}
+
+input.flatpickr-input:hover {
+  background-color: #f5e9d2 !important;
+  transform: scale(1.03);
+}
+
+input.flatpickr-input:focus {
+  outline: none;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25);
 }

@@ -39,7 +39,7 @@ if (document.getElementById('taskInput')) {
       if (!b.date) return -1;
       return new Date(a.date) - new Date(b.date);
     });
-
+//แสดงจำนวนงานตาม dashboard
     let filteredTasks = [];
     if (currentFilter === 'all') filteredTasks = tasks;
     else if (currentFilter === 'done') filteredTasks = tasks.filter(t => t.completed);
@@ -81,7 +81,7 @@ if (document.getElementById('taskInput')) {
 
       infoDiv.appendChild(span);
       infoDiv.appendChild(dateSpan);
-
+// ปุ่มแก้ไขและลบ
       const btnGroup = document.createElement('div');
       btnGroup.className = 'btn-group';
 
@@ -238,19 +238,19 @@ if (document.getElementById('diaryDate')) {
     renderDiaryList();
   }
 
-  // 📖 แสดง popup ของแต่ละวัน
+  // แสดง popup ของแต่ละวัน
   function showPopup(entry) {
-    popupDate.textContent = `📅 Date: ${entry.date}`;
+    popupDate.textContent = ` Date: ${entry.date}`;
     popupText.innerHTML = ''; // เคลียร์เนื้อหาเก่า
 
-    // 📝 ข้อความในไดอารี่
+    //ข้อความในไดอารี่
     if (entry.text) {
       const diaryPara = document.createElement('p');
       diaryPara.textContent = entry.text;
       popupText.appendChild(diaryPara);
     }
 
-    // 🖼️ แสดงรูปถ้ามี
+    // แสดงรูปถ้ามี
     if (entry.image) {
       const img = document.createElement('img');
       img.src = entry.image;
@@ -261,7 +261,7 @@ if (document.getElementById('diaryDate')) {
       popupText.appendChild(img);
     }
 
-    // ✅ To-Do ที่เสร็จแล้วของวันเดียวกัน
+    // To-Do ที่เสร็จแล้วของวันเดียวกัน
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     const doneTasks = tasks.filter(t => t.completed && t.date === entry.date);
 
@@ -282,7 +282,7 @@ if (document.getElementById('diaryDate')) {
     popupOverlay.style.display = 'flex';
   }
 
-  // 📅 แสดงรายการ diary ทั้งหมด
+  // แสดงรายการ diary ทั้งหมด
   function renderDiaryList() {
     diaryList.innerHTML = '';
     if (diaries.length === 0) {
@@ -307,7 +307,7 @@ if (document.getElementById('diaryDate')) {
       const btnGroup = document.createElement('div');
       btnGroup.className = 'btn-group';
 
-      // ✏️ แก้ไข
+      // แก้ไข
       const editBtn = document.createElement('button');
       editBtn.textContent = 'แก้ไข';
       editBtn.className = 'edit-btn';
@@ -324,7 +324,7 @@ if (document.getElementById('diaryDate')) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       };
 
-      // 🗑️ ลบ
+      // ลบ
       const deleteBtn = document.createElement('button');
       deleteBtn.textContent = 'ลบ';
       deleteBtn.className = 'delete-btn';
@@ -349,3 +349,35 @@ if (document.getElementById('diaryDate')) {
   closePopup.addEventListener('click', () => (popupOverlay.style.display = 'none'));
   renderDiaryList();
 }
+/* Flatpickr*/
+if (typeof flatpickr !== "undefined") {
+  // หน้า To-Do List
+  if (document.getElementById('dateInput')) {
+    flatpickr("#dateInput", {
+      dateFormat: "Y-m-d",
+      altInput: true,
+      altFormat: "F j, Y",
+      theme: "material_yellow",
+      allowInput: true,
+      onReady: function(selectedDates, dateStr, instance) {
+        instance.altInput.placeholder = "กรุณาเลือก ว/ด/ป";
+      }
+    });
+  }
+
+  // หน้า Diary
+  if (document.getElementById('diaryDate')) {
+    flatpickr("#diaryDate", {
+      dateFormat: "Y-m-d",
+      altInput: true,
+      altFormat: "F j, Y",
+      theme: "material_yellow",
+      allowInput: true,
+      onReady: function(selectedDates, dateStr, instance) {
+        instance.altInput.placeholder = "กรุณาเลือก ว/ด/ป";
+      }
+    });
+  }
+}
+
+
