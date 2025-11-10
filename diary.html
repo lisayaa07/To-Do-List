@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> Diary</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>My Diary</h1>
+
+  <div class="diary-container">
+    <div class="input-group diary-input">
+      <input type="date" id="diaryDate">
+      <button id="saveDiary">บันทึก</button>
+    </div>
+
+    <div class="text-area-box">
+      <textarea id="diaryText" placeholder="เขียนสิ่งที่คุณเจอมาในวันนี้ได้เลย..." rows="10"></textarea>
+    </div>
+  </div>
+
+  <div class="diary-list">
+    <h2>รายการทั้งหมด</h2>
+    <ul id="diaryList"></ul>
+  </div>
+
+  <footer>
+    <a href="index.html" class="retro-btn">กลับไปหน้าหลัก</a>
+  </footer>
+
+  <div id="popupOverlay" class="popup-overlay">
+    <div class="popup-box">
+      <h3 id="popupDate"></h3>
+      <p id="popupText"></p>
+      <button id="closePopup">Close</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
